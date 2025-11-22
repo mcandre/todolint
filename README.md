@@ -1,10 +1,10 @@
-# todolint: a static analyzer for incomplete code snippets
+# todolint: the out of the box SAST security scanner
 
 ![logo](todolint.png)
 
 # SUMMARY
 
-todolint scans projects for comments about incomplete source code snippets.
+todolint identifies bugs based on code comments.
 
 * `hack`
 * `fixme`
