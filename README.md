@@ -14,8 +14,8 @@ todolint scans projects for comments about unfinished tasks.
 $ cd examples
 
 $ todolint .
-incomplete task: docs/backlog.txt:1: TODO: Internationalize console messages.
-incomplete task: greet.c:4: // FIXME: Validate argc
+docs/backlog.txt:1:TODO: Internationalize console messages.
+greet.c:4:// FIXME: Validate argc
 ```
 
 See `todolint -h` for more options.

@@ -13,9 +13,6 @@ use std::path;
 use std::process;
 
 lazy_static::lazy_static! {
-    /// MESSAGE provides a general description for incomplete tasks.
-    pub static ref MESSAGE: String = "incomplete task".to_string();
-
     /// DEFAULT_TODO_PATTERN matches common TODO tasks.
     ///
     /// Examples:
@@ -64,11 +61,19 @@ fn test_default_todo_pattern() {
     assert!(pattern.is_match("fixme: walk the dog"));
     assert!(pattern.is_match("fixmes"));
     assert!(pattern.is_match("fixmes: walk the dog, feed the dog"));
+    assert!(!pattern.is_match("TO-DO"));
+    assert!(!pattern.is_match("TO-DO:"));
+    assert!(!pattern.is_match("TO DO"));
+    assert!(!pattern.is_match("TO DO:"));
+    assert!(pattern.is_match("TODO"));
+    assert!(pattern.is_match("ToDo"));
     assert!(pattern.is_match("todo"));
     assert!(pattern.is_match("todo: walk the dog"));
     assert!(pattern.is_match("todos"));
     assert!(pattern.is_match("todos: walk the dog, feed the dog"));
     assert!(!pattern.is_match("pending: https://dogwalker.test/tickets/123"));
+    assert!(!pattern.is_match("Let's make a big to do out of it!"));
+    assert!(!pattern.is_match("some have-nots and well-to-dos"));
 }
 
 #[test]
@@ -105,8 +110,7 @@ impl fmt::Display for Warning {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "{}: {}:{}: {}",
-            MESSAGE.clone(),
+            "{}:{}:{}",
             self.path,
             self.line_number,
             self.line
