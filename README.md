@@ -31,6 +31,7 @@ $ todolint .
 docs/backlog.txt:1:PTE: Internacionalizar los mensajes de la consola.
 greet.c:8:// PTE: Validar 1 < argc < 3
 greet.c:12:// PTE
+metrics.js:10:// truco: dividir por cero"
 
 $ cd ../zh-cn
 $ todolint .

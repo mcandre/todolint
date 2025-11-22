@@ -2,4 +2,4 @@
 
 formal_task_pattern = "(?i)^.*pendiente: [^:]+:.+$"
 
-task_pattern = "(?i)^.*\\b(pte|pend|pendiente)\\b.*$"
+task_pattern = "(?i)^.*\\b(pte|pend|pendiente|truco)\\b.*$"
