@@ -59,18 +59,20 @@ todolint identifies software bugs, by searching codebases for mentions of unreso
 
 Examples:
 
-* `pend: pasear al perro`
-* `pend.: pasear al perro`
-* `pte: pasear al perro`
-* `todo: walk the dog`
-* `裏技: 犬の散歩`
-* `粗笨: 遛狗`
+```rust
+// todo: walk the dog
+
+// todo
+// walk the dog
+```
 
 However, todolint allows comments that cite a URI-like resource, using the notation `<status>: <uri>`. The resource may provide a FAQ, ticketing system, or other documentation.
 
 Exception:
 
-* `pending: https://pubs.opengroup.org/onlinepubs/9799919799/`
+```rust
+// pending: https://doc.rust-lang.org/beta/rustc/platform-support.html
+```
 
 Thus, we now have a formal notation to track coding imperfections, including metadata about _why_ the code may be stuck indefinitely in its current written state.
 
