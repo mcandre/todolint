@@ -47,11 +47,9 @@ greet.c:8:// 待辦
 metrics.js:10:// 妙招: 零除
 ```
 
-See `todolint -h` for more options.
+See [CONFIGURATION.md](CONFIGURATION.md) for configuration file options.
 
-# CONFIGURATION
-
-For more details on configuring todolint, see [CONFIGURATION.md](CONFIGURATION.md).
+Run `todolint -h` for CLI options.
 
 # ABOUT
 
