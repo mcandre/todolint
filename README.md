@@ -17,7 +17,7 @@ $ cd examples
 
 $ todolint .
 docs/backlog.txt:1:TODO: Internationalize console messages.
-greet.c:4:// FIXME: Validate argc
+greet.c:4:// FixMe: Validate argc
 ```
 
 See `todolint -h` for more options.
