@@ -18,7 +18,6 @@ $ cd examples
 
 $ ls -l
 total 8
--rw-r--r--@ 1 andrew  staff   95 Nov 22 11:40 email-beacon.png
 drwxr-xr-x  5 andrew  staff  160 Nov 22 11:16 en-us
 drwxr-xr-x  6 andrew  staff  192 Nov 22 12:54 es-mx
 drwxr-xr-x  6 andrew  staff  192 Nov 22 13:07 zh-cn
