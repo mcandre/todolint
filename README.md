@@ -11,6 +11,10 @@ todolint scans projects for comments about incomplete source code snippets.
 * `todo`
 * etc.
 
+# LOCALIZATIONS WELCOME
+
+Speakers are invited to submit pull requests to improve the writing in our examples.
+
 # EXAMPLES
 
 ```console
