@@ -108,4 +108,14 @@ For more details on developing todolint itself, see [DEVELOPMENT.md](DEVELOPMENT
 
 BSD-2-Clause
 
+# SEE ALSO
+
+* [chandler](https://github.com/mcandre/chandler) normalizes tarballs
+* [kirill](https://github.com/mcandre/kirill) scans JSON documents
+* [linters](https://github.com/mcandre/linters) curates many linters, SAST tools, and style guides
+* [nile](https://github.com/mcandre/nile) normalizes ebooks
+* [slick](https://github.com/mcandre/slick) scans POSIX shell scripts
+* [stank](https://github.com/mcandre/stank) scans shell scripts
+* [unmake](https://github.com/mcandre/unmake) scans makefiles
+
 ✏️
