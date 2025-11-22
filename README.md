@@ -1,4 +1,4 @@
-# todolint: the out of the box SAST security scanner
+# todolint: code comment SAST security scanner
 
 ![logo](todolint.png)
 
