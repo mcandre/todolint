@@ -44,6 +44,7 @@ greet.c:4:// 待办: 验证 1 < argc < 3
 greet.c:8:// 待办
 metrics.js:10:// 妙招: 零除
 
+$ cd zh-hk
 $ todolint .
 docs/backlog.txt:1:待辦: 國際化控制台訊息。
 greet.c:4:// 待辦: 驗證 1 < argc < 3
