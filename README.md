@@ -6,9 +6,9 @@
 
 todolint scans projects for comments about incomplete source code snippets.
 
-* `HACK:`
-* `FIXME:`
-* `TODO:`
+* `HACK`
+* `FIXME`
+* `TODO`
 * Etc.
 
 # EXAMPLES
