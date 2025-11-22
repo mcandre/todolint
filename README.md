@@ -6,8 +6,8 @@
 
 todolint scans projects for comments about unfinished tasks.
 
-* `TODO:` ...
-* `FIXME:` ...
+* `TODO:`
+* `FIXME:`
 * Etc.
 
 # EXAMPLES
