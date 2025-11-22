@@ -1,5 +1,7 @@
 # todolint: a static analyzer for incomplete code smells
 
+![logo](examples/pencils.png)
+
 # SUMMARY
 
 todolint scans projects for comments about unfinished tasks.
