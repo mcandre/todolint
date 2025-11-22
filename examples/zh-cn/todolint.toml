@@ -1,5 +1,18 @@
 # debug = true
 
+# skip_paths = [
+#     "todolint.toml",
+#     ".git",
+#     "i18n",
+#     "l10n",
+#     "node_modules",
+#     "target",
+#     "vendor",
+# ]
+
 formal_task_pattern = "(?i)^.*待办: [^:]+:.+$"
 
-task_pattern = "(?i)^.*\\b(待办|妙招)\\b.*$"
+task_names = [
+    "待办",
+    "妙招",
+]

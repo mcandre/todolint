@@ -1,5 +1,20 @@
 # debug = true
 
+# skip_paths = [
+#     "todolint.toml",
+#     ".git",
+#     "i18n",
+#     "l10n",
+#     "node_modules",
+#     "target",
+#     "vendor",
+# ]
+
 formal_task_pattern = "(?i)^.*pendiente: [^:]+:.+$"
 
-task_pattern = "(?i)^.*\\b(pte|pend|pendiente|truco)\\b.*$"
+task_names = [
+    "pte",
+    "pend",
+    "pendiente",
+    "truco",
+]

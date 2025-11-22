@@ -18,86 +18,102 @@ use std::process;
 lazy_static::lazy_static! {
     /// CONFIGURATION_FILENAME denotes the file path to an optional TOML configuration file,
     /// relative to the current working directory.
-    pub static ref CONFIGURATION_FILENAME: String = "todolint.toml".to_string();
+    pub static ref CONFIGURATION_FILENAME: &'static str = "todolint.toml";
 
     /// DEFAULT_FORMAL_TASK_PATTERN matches standardized, crossreferenced code snippets of the form `pending: <uri>`.
-    pub static ref DEFAULT_FORMAL_TASK_PATTERN: String = "(?i)^.*pending: [^:]+:.+$".to_string();
+    pub static ref DEFAULT_FORMAL_TASK_PATTERN: &'static str = "(?i)^.*pending: [^:]+:.+$";
 
-    /// TASK_MARKERS collect common incomplete code snippet indicators.
-    pub static ref TASK_MARKERS: Vec<String> = vec![
+    /// DEFAULT_TASK_NAMES collect common task terms.
+    pub static ref DEFAULT_TASK_NAMES: Vec<String> = [
         // English
-        "band aid".to_string(),
-        "band-aid".to_string(),
-        "bandaid".to_string(),
-        "bodge".to_string(),
-        "cludge".to_string(),
-        "duct tape".to_string(),
-        "duct-tape".to_string(),
-        "ducttape".to_string(),
-        "duck tape".to_string(),
-        "duck-tape".to_string(),
-        "ducktape".to_string(),
-        "hack".to_string(),
-        "kludge".to_string(),
-        "fixme".to_string(),
-        "jury rig".to_string(),
-        "jury-rig".to_string(),
-        "juryrig".to_string(),
-        "macgyver".to_string(),
-        "makeshift".to_string(),
-        "rube goldberg".to_string(),
-        "rube-goldberg".to_string(),
-        "rube goldberg".to_string(),
-        "stop-gap".to_string(),
-        "stop gap".to_string(),
-        "stopgap".to_string(),
-        "temporary solution".to_string(),
-        "to-do".to_string(),
-        "todo".to_string(),
-        "waiting on".to_string(),
-        "workaround".to_string(),
-    ];
+        "band aid",
+        "band-aid",
+        "bandaid",
+        "bodge",
+        "cludge",
+        "duct tape",
+        "duct-tape",
+        "ducttape",
+        "duck tape",
+        "duck-tape",
+        "ducktape",
+        "hack",
+        "kludge",
+        "fixme",
+        "jury rig",
+        "jury-rig",
+        "juryrig",
+        "macgyver",
+        "makeshift",
+        "rube goldberg",
+        "rube-goldberg",
+        "rube goldberg",
+        "stop-gap",
+        "stop gap",
+        "stopgap",
+        "temporary solution",
+        "to-do",
+        "todo",
+        "waiting on",
+        "workaround",
+    ]
+        .iter()
+        .map(|e| e.to_string())
+        .collect();
 
     ///
-    /// DEFAULT_TASK_PATTERN matches common incomplete code snippets.
+    /// GENERAL_TASK_PATTERN_TEMPLATE combines `{task_names}` and a pipe (|) delimited task name string, to form a patteron for matching incomplete code snippets.
     ///
-    /// Examples:
-    ///
-    /// * "hack"
-    /// * "fixme"
-    /// * "todo"
-    /// * etc.
-    ///
-    /// Note that terms like "todo" may trigger false positives in some non-English files.
-    ///
-    pub static ref DEFAULT_TASK_PATTERN: String = format!(
-        r"(?i)^.*\b({})\b.*$",
-        TASK_MARKERS.join("|")
-    );
+    pub static ref GENERAL_TASK_PATTERN_TEMPLATE: &'static str = r"(?i)^.*\b({task_names})\b.*$";
 
-    /// JUNK_PATHS collects common third party file paths.
-    pub static ref JUNK_PATHS: Vec<String> = vec![
+    /// DEFAULT_SKIP_PATHS collects common third party file paths.
+    pub static ref DEFAULT_SKIP_PATHS: Vec<String> = [
         // todolint
-        CONFIGURATION_FILENAME.clone(),
+        &CONFIGURATION_FILENAME,
 
         // VCS
-        ".git".to_string(),
+        ".git",
 
         // Internationalization
-        "i18n".to_string(),
-        "l10n".to_string(),
+        "i18n",
+        "l10n",
 
         // Third party code
-        "node_modules".to_string(),
-        "target".to_string(),
-        "vendor".to_string(),
-    ];
+        "node_modules",
+        "target",
+        "vendor",
+    ]
+        .iter()
+        .map(|e| e.to_string())
+        .collect();
 
-    /// DEFAULT_PATH_EXCLUSION_PATTERN matches common third party file paths.
-    pub static ref DEFAULT_PATH_EXCLUSION_PATTERN: String = format!(r"^.*(/|\\)?({})$", JUNK_PATHS.join("|"));
+    /// SKIP_PATHS_PATTERN_TEMPLATE combines `{skip_paths}` and a pipe (|) delimited file paths string to form a pattern matching skippable file paths.
+    pub static ref SKIP_PATHS_PATTERN_TEMPLATE: &'static str = r"^.*(/|\\)?({skip_paths})$";
 
     // TEXT_MIMETYPE_PATTERN matches text mimetypes.
     pub static ref TEXT_MIMETYPE_PATTERN: regex::Regex = regex::Regex::new("^text/.+$").unwrap();
+}
+
+/// generate_skip_path_pattern builds a file path matching pattern from a collection of file paths.
+pub fn generate_skip_path_pattern(file_paths: &[String]) -> Result<regex::Regex, regex::Error> {
+    regex::Regex::new(&SKIP_PATHS_PATTERN_TEMPLATE.replace("{skip_paths}", &file_paths.join("|")))
+}
+
+#[test]
+fn test_default_path_exclusion_pattern() {
+    let pattern = generate_skip_path_pattern(&DEFAULT_SKIP_PATHS).unwrap();
+    assert!(pattern.is_match(&CONFIGURATION_FILENAME));
+    assert!(pattern.is_match(".git"));
+    assert!(pattern.is_match("./.git"));
+    assert!(pattern.is_match("../.git"));
+    assert!(pattern.is_match("node_modules"));
+    assert!(pattern.is_match("target"));
+    assert!(pattern.is_match("vendor"));
+}
+
+/// generate_task_pattern builds a task pattern from a collection of task names.
+pub fn generate_task_pattern(task_names: &[String]) -> Result<regex::Regex, regex::Error> {
+    regex::Regex::new(&GENERAL_TASK_PATTERN_TEMPLATE.replace("{task_names}", &task_names.join("|")))
 }
 
 #[test]
@@ -111,7 +127,7 @@ fn test_default_formal_task_pattern() {
 
 #[test]
 fn test_default_task_pattern() {
-    let pattern = regex::Regex::new(&DEFAULT_TASK_PATTERN).unwrap();
+    let pattern = generate_task_pattern(&DEFAULT_TASK_NAMES).unwrap();
     assert!(pattern.is_match("BAND-AID"));
     assert!(pattern.is_match("BAND AID"));
     assert!(pattern.is_match("BANDAID"));
@@ -135,20 +151,8 @@ fn test_default_task_pattern() {
 }
 
 #[test]
-fn test_default_path_exclusion_pattern() {
-    let pattern = regex::Regex::new(&DEFAULT_PATH_EXCLUSION_PATTERN).unwrap();
-    assert!(pattern.is_match(&CONFIGURATION_FILENAME));
-    assert!(pattern.is_match(".git"));
-    assert!(pattern.is_match("./.git"));
-    assert!(pattern.is_match("../.git"));
-    assert!(pattern.is_match("node_modules"));
-    assert!(pattern.is_match("target"));
-    assert!(pattern.is_match("vendor"));
-}
-
-#[test]
 fn test_text_mimetype_pattern() {
-    let pattern = TEXT_MIMETYPE_PATTERN.clone();
+    let pattern = &TEXT_MIMETYPE_PATTERN;
     assert!(pattern.is_match("text/markdown"));
     assert!(pattern.is_match("text/plain"));
     assert!(pattern.is_match("text/x-c"));
@@ -214,20 +218,20 @@ pub struct Linter {
     /// debug enables additional logging.
     pub debug: Option<bool>,
 
-    /// path_exclusion_pattern matches skippable file paths.
+    /// skip_paths match skippable file paths.
     ///
     /// Syntax is Rust [regex](https://crates.io/crates/regex).
-    pub path_exclusion_pattern: Option<String>,
+    pub skip_paths: Option<Vec<String>>,
 
     /// formal_task_pattern matches standardized, documented code snippets.
     ///
     /// Syntax is Rust [regex](https://crates.io/crates/regex).
     pub formal_task_pattern: Option<String>,
 
-    /// task_pattern matches incomplete code snippets.
+    /// task_names match incomplete code snippets.
     ///
     /// Syntax is Rust [regex](https://crates.io/crates/regex).
-    pub task_pattern: Option<String>,
+    pub task_names: Option<Vec<String>>,
 }
 
 impl Linter {
@@ -245,13 +249,10 @@ impl Linter {
     /// the given directories and/or file root paths
     /// for non-binary file paths.
     pub fn find_text_paths(&self, roots: Vec<&path::Path>) -> Result<Vec<String>, TodolintError> {
-        let default_path_exclusion_pattern = DEFAULT_PATH_EXCLUSION_PATTERN.clone();
-        let path_exclusion_pattern = regex::Regex::new(
-            self.path_exclusion_pattern
-                .as_ref()
-                .unwrap_or(&default_path_exclusion_pattern),
-        )
-        .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
+        let default_paths: Vec<String> = DEFAULT_SKIP_PATHS.iter().map(|e| e.to_string()).collect();
+        let path_exclusion_pattern =
+            generate_skip_path_pattern(self.skip_paths.as_ref().unwrap_or(&default_paths))
+                .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
         let mut pth_bufs = Vec::<path::PathBuf>::new();
 
         for root in roots {
@@ -341,8 +342,9 @@ impl Linter {
     }
 
     pub fn check(&self, pth: String) -> Result<Vec<Warning>, TodolintError> {
-        let default_formal_task_pattern = DEFAULT_FORMAL_TASK_PATTERN.clone();
-        let default_task_pattern = DEFAULT_TASK_PATTERN.clone();
+        let default_formal_task_pattern: String = DEFAULT_FORMAL_TASK_PATTERN.to_string();
+        let default_task_names: Vec<String> =
+            DEFAULT_TASK_NAMES.iter().map(|e| e.to_string()).collect();
         let formal_task_pattern = regex::Regex::new(
             self.formal_task_pattern
                 .as_ref()
@@ -350,9 +352,8 @@ impl Linter {
         )
         .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
         let task_pattern =
-            regex::Regex::new(self.task_pattern.as_ref().unwrap_or(&default_task_pattern))
+            generate_task_pattern(self.task_names.as_ref().unwrap_or(&default_task_names))
                 .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
-
         let file = fs::File::open(&pth)
             .map_err(|_| TodolintError::IOError(format!("unable to open file: {}", &pth)))?;
         let reader = io::BufReader::new(file);
