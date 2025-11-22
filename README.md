@@ -16,12 +16,8 @@ todolint scans projects for comments about incomplete source code snippets.
 ```console
 $ cd examples
 
-$ ls -l
-total 8
-drwxr-xr-x  5 andrew  staff  160 Nov 22 11:16 en-us
-drwxr-xr-x  6 andrew  staff  192 Nov 22 12:54 es-mx
-drwxr-xr-x  6 andrew  staff  192 Nov 22 13:07 zh-cn
-drwxr-xr-x  6 andrew  staff  192 Nov 22 13:09 zh-hk
+$ ls
+en-us	es-mx	zh-cn	zh-hk
 
 $ cd en-us
 $ todolint .
