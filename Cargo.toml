@@ -1,0 +1,34 @@
+[package]
+name = "todolint"
+description = "a static analyzer for incomplete code smells"
+version = "0.0.1"
+edition = "2024"
+authors = ["Andrew Pennebaker <n4jm4@pm.me>"]
+license = "BSD-2-Clause"
+repository = "https://github.com/mcandre/todolint"
+
+[dependencies]
+clean-path = "0.2.1"
+die = "0.2.0"
+getopts = "0.2.24"
+lazy_static = "1.5.0"
+mimetype-detector = "0.3.1"
+regex = "1.12.2"
+tinyrick = { version = "0.0.17", optional = true }
+tinyrick_extras = { version = "0.0.11", optional = true }
+walkdir = "2.5.0"
+
+[features]
+letmeout = ["tinyrick", "tinyrick_extras"]
+
+[lib]
+name = "todolint"
+
+[[bin]]
+name = "todolint"
+path = "src/todolint.rs"
+
+[[bin]]
+name = "tinyrick"
+path = "tinyrick.rs"
+required-features = ["letmeout"]
