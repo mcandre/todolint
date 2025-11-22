@@ -1,0 +1,5 @@
+# debug = true
+
+formal_task_pattern = "(?i)^.*待辦: [^:]+:.+$"
+
+task_pattern = "(?i)^.*\\b(待辦|妙招)\\b.*$"

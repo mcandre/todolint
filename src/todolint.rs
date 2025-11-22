@@ -1,6 +1,5 @@
 //! CLI kirill tool
 
-extern crate die;
 extern crate getopts;
 extern crate todolint;
 
@@ -23,6 +22,7 @@ fn main() {
     let usage: String = opts.usage(&brief);
     let arguments: Vec<String> = env::args().collect();
     let optmatches: getopts::Matches = opts.parse(&arguments[1..]).die(&usage);
+    let debug = optmatches.opt_present("d");
 
     if optmatches.opt_present("h") {
         die!(0; usage);
@@ -33,9 +33,22 @@ fn main() {
     }
 
     let mut linter = todolint::Linter::default();
+    let configuration_filename: &str = &todolint::CONFIGURATION_FILENAME;
 
-    if optmatches.opt_present("d") {
-        linter.debug = true;
+    if path::Path::new(configuration_filename).exists() {
+        if debug {
+            eprintln!("debug: loading configuration file: {configuration_filename}");
+        }
+
+        match todolint::Linter::load() {
+            Err(e) => die!(1; "error: {}", e),
+            Ok(l) => linter = l,
+        }
+    }
+
+    if debug {
+        linter.debug = Some(debug);
+        eprintln!("debug: configuration: {:?}", linter);
     }
 
     let rest_args = optmatches.free;

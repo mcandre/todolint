@@ -1,30 +1,61 @@
 # todolint: a static analyzer for incomplete code snippets
 
-![logo](examples/pencils.png)
+![logo](todolint.png)
 
 # SUMMARY
 
 todolint scans projects for comments about incomplete source code snippets.
 
-* `HACK`
-* `FIXME`
-* `TODO`
-* Etc.
+* `hack`
+* `fixme`
+* `todo`
+* etc.
 
 # EXAMPLES
 
 ```console
 $ cd examples
 
+$ ls -l
+total 8
+-rw-r--r--@ 1 andrew  staff   95 Nov 22 11:40 email-beacon.png
+drwxr-xr-x  5 andrew  staff  160 Nov 22 11:16 en-us
+drwxr-xr-x  6 andrew  staff  192 Nov 22 12:54 es-mx
+drwxr-xr-x  6 andrew  staff  192 Nov 22 13:07 zh-cn
+drwxr-xr-x  6 andrew  staff  192 Nov 22 13:09 zh-hk
+
+$ cd en-us
 $ todolint .
 docs/backlog.txt:1:FIXME: Internationalize console messages.
-greet.c:4:// TODO: Validate argc >= 1
-greet.c:7:// TODO: Validate argc <= 2
-greet.c:10:// PTE: falta codigo de salida
-metrics.js:11:// hack: divide by zero
+greet.c:4:// TODO: Validate 1 < argc < 3
+greet.c:8:// TODO
+metrics.js:10:// hack: divide by zero
+
+$ cd ../es-mx
+$ todolint .
+docs/backlog.txt:1:PTE: Internacionalizar los mensajes de la consola.
+greet.c:8:// PTE: Validar 1 < argc < 3
+greet.c:12:// PTE
+
+$ cd ../zh-cn
+$ todolint .
+docs/backlog.txt:1:待办: 将控制台消息国际化为普通话。
+greet.c:4:// 待办: 验证 1 < argc < 3
+greet.c:8:// 待办
+metrics.js:10:// 妙招: 零
+
+$ todolint .
+docs/backlog.txt:1:待辦: 國際化控制台訊息。
+greet.c:4:// 待辦: 驗證 1 < argc < 3
+greet.c:8:// 待辦
+metrics.js:10:// 妙招: 零
 ```
 
 See `todolint -h` for more options.
+
+# CONFIGURATION
+
+For more details on configuring todolint, see [CONFIGURATION.md](CONFIGURATION.md).
 
 # ABOUT
 

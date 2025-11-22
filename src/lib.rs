@@ -1,10 +1,13 @@
 //! todolint provides predicates for scanning for incomplete tasks.
 
 extern crate clean_path;
-extern crate fancy_regex;
 extern crate lazy_static;
 extern crate mimetype_detector;
+extern crate regex;
+extern crate toml;
 extern crate walkdir;
+
+use serde::{Deserialize, Serialize};
 
 use std::fmt;
 use std::fs;
@@ -13,8 +16,15 @@ use std::path;
 use std::process;
 
 lazy_static::lazy_static! {
-    /// TODO_MARKERS collects common incomplete code snippet prefixes.
-    pub static ref TODO_MARKERS: Vec<String> = vec![
+    /// CONFIGURATION_FILENAME denotes the file path to an optional TOML configuration file,
+    /// relative to the current working directory.
+    pub static ref CONFIGURATION_FILENAME: String = "todolint.toml".to_string();
+
+    /// DEFAULT_FORMAL_TASK_PATTERN matches standardized, crossreferenced code snippets of the form `pending: <uri>`.
+    pub static ref DEFAULT_FORMAL_TASK_PATTERN: String = "(?i)^.*pending: [^:]+:.+$".to_string();
+
+    /// TASK_MARKERS collect common incomplete code snippet indicators.
+    pub static ref TASK_MARKERS: Vec<String> = vec![
         // English
         "band aid".to_string(),
         "band-aid".to_string(),
@@ -35,123 +45,115 @@ lazy_static::lazy_static! {
         "juryrig".to_string(),
         "macgyver".to_string(),
         "makeshift".to_string(),
-        "patch".to_string(),
-        "pending".to_string(),
         "rube goldberg".to_string(),
         "rube-goldberg".to_string(),
         "rube goldberg".to_string(),
+        "stop-gap".to_string(),
+        "stop gap".to_string(),
         "stopgap".to_string(),
+        "temporary solution".to_string(),
+        "to-do".to_string(),
         "todo".to_string(),
-        "waiting for".to_string(),
         "waiting on".to_string(),
         "workaround".to_string(),
-
-        // Iberian ASCII/Unicode
-        "apano".to_string(),
-        "apaño".to_string(),
-        "chapuza".to_string(),
-        "engenhoca".to_string(),
-        "gambiarra".to_string(),
-        "pend".to_string(),
-        "pte".to_string(),
-        "quebra galho".to_string(),
-        "quebra-galho".to_string(),
-        "quebragalho".to_string(),
-        "remendo".to_string(),
-        "truco".to_string(),
-
-        // Japanese
-        "ガラクタ".to_string(),
-        "ハック".to_string(),
-        "後で".to_string(),
-        "急ごしらえ".to_string(),
-        "裏技".to_string(),
-        "間に合わせ".to_string(),
-
-        // Chinese
-        "应付".to_string(),
-        "粗笨".to_string(),
     ];
 
     ///
-    /// TODO_PATTERN matches common incomplete code snippets.
+    /// DEFAULT_TASK_PATTERN matches common incomplete code snippets.
     ///
     /// Examples:
     ///
-    /// * "pend: pasear al perro"
-    /// * "pend.: pasear al perro"
-    /// * "pte: pasear al perro"
-    /// * "todo: walk the dog"
-    /// * "裏技: 犬の散歩"
-    /// * "粗笨: 遛狗"
+    /// * "hack"
+    /// * "fixme"
+    /// * "todo"
+    /// * etc.
     ///
-    /// However, TODO markers that cite a URI-like resource,
-    /// such as a FAQ or support ticket,
-    /// are permitted.
+    /// Note that terms like "todo" may trigger false positives in some non-English files.
     ///
-    /// Exceptions:
-    ///
-    /// * "pendente: https://support.google.com/chrome"
-    /// * "pendiente: https://support.google.com/chrome"
-    /// * "pending: https://support.google.com/chrome"
-    /// * "保留: https://support.google.com/chrome"
-    /// * "待办: https://support.google.com/chrome"
-    ///
-    pub static ref TODO_PATTERN: fancy_regex::Regex = fancy_regex::Regex::new(
-&format!(
-            r"(?i)^.*({})(?!\w|\:\s*.+\:.+).*$",
-            TODO_MARKERS.join("|")
-        )
-    ).unwrap();
+    pub static ref DEFAULT_TASK_PATTERN: String = format!(
+        r"(?i)^.*\b({})\b.*$",
+        TASK_MARKERS.join("|")
+    );
 
     /// JUNK_PATHS collects common third party file paths.
     pub static ref JUNK_PATHS: Vec<String> = vec![
+        // todolint
+        CONFIGURATION_FILENAME.clone(),
+
+        // VCS
+        ".git".to_string(),
+
+        // Internationalization
+        "i18n".to_string(),
+        "l10n".to_string(),
+
+        // Third party code
         "node_modules".to_string(),
         "target".to_string(),
         "vendor".to_string(),
     ];
 
-    /// DEFAULT_EXCLUSION_PATTERN matches common third party file paths.
-    pub static ref DEFAULT_EXCLUSION_PATTERN: fancy_regex::Regex = fancy_regex::Regex::new(
-        &format!(r"^.*(/|\\)?({})$", JUNK_PATHS.join("|"))
-    ).unwrap();
+    /// DEFAULT_PATH_EXCLUSION_PATTERN matches common third party file paths.
+    pub static ref DEFAULT_PATH_EXCLUSION_PATTERN: String = format!(r"^.*(/|\\)?({})$", JUNK_PATHS.join("|"));
 
     // TEXT_MIMETYPE_PATTERN matches text mimetypes.
-    pub static ref TEXT_MIMETYPE_PATTERN: fancy_regex::Regex = fancy_regex::Regex::new("^text/.+$").unwrap();
+    pub static ref TEXT_MIMETYPE_PATTERN: regex::Regex = regex::Regex::new("^text/.+$").unwrap();
 }
 
 #[test]
-fn test_todo_pattern() -> Result<(), fancy_regex::Error> {
-    let pattern = TODO_PATTERN.clone();
-    assert!(pattern.is_match("TODO")?);
-    assert!(pattern.is_match("TODO:")?);
-    assert!(pattern.is_match("TODO: walk the dog")?);
-    assert!(!pattern.is_match("TODO: https://ticket.test/123")?);
-    assert!(pattern.is_match("Todo")?);
-    assert!(pattern.is_match("Todo:")?);
-    assert!(pattern.is_match("Todo: walk the dog")?);
-    assert!(!pattern.is_match("Todo: https://ticket.test/123")?);
-    assert!(pattern.is_match("todo")?);
-    assert!(pattern.is_match("todo:")?);
-    assert!(pattern.is_match("todo: walk the dog")?);
-    assert!(!pattern.is_match("todo: https://ticket.test/123")?);
-    assert!(pattern.is_match("pend.: passear o cão")?);
-    assert!(!pattern.is_match("pending: https://ticket.test/123")?);
-    assert!(!pattern.is_match("Let's make a big to do out of it!")?);
-    assert!(!pattern.is_match("some have-nots and well-to-dos")?);
-    assert!(!pattern.is_match("band")?);
-    Ok(())
+fn test_default_formal_task_pattern() {
+    let pattern = regex::Regex::new(&DEFAULT_FORMAL_TASK_PATTERN).unwrap();
+    assert!(pattern.is_match("PENDING: https://ticket.test/123"));
+    assert!(pattern.is_match("Pending: https://ticket.test/123"));
+    assert!(pattern.is_match("pending: https://ticket.test/123"));
+    assert!(!pattern.is_match("pending:"));
 }
 
 #[test]
-fn test_text_mimetype_pattern() -> Result<(), fancy_regex::Error> {
+fn test_default_task_pattern() {
+    let pattern = regex::Regex::new(&DEFAULT_TASK_PATTERN).unwrap();
+    assert!(pattern.is_match("BAND-AID"));
+    assert!(pattern.is_match("BAND AID"));
+    assert!(pattern.is_match("BANDAID"));
+    assert!(!pattern.is_match("BAND"));
+    assert!(pattern.is_match("hack"));
+    assert!(!pattern.is_match("hacker"));
+    assert!(pattern.is_match("this is a hack--it should be rewritten"));
+    assert!(pattern.is_match("this is a hack. it should be rewritten"));
+    assert!(pattern.is_match("this is a hack and it should be rewritten"));
+    assert!(pattern.is_match("TO-DO"));
+    assert!(pattern.is_match("TODO"));
+    assert!(pattern.is_match("TODO:"));
+    assert!(pattern.is_match("TODO: walk the dog"));
+    assert!(pattern.is_match("Todo"));
+    assert!(pattern.is_match("Todo:"));
+    assert!(pattern.is_match("Todo: walk the dog"));
+    assert!(pattern.is_match("todo"));
+    assert!(pattern.is_match("todo:"));
+    assert!(pattern.is_match("todo: walk the dog"));
+    assert!(!pattern.is_match("Let's make a big to do out of it!"));
+}
+
+#[test]
+fn test_default_path_exclusion_pattern() {
+    let pattern = regex::Regex::new(&DEFAULT_PATH_EXCLUSION_PATTERN).unwrap();
+    assert!(pattern.is_match(&CONFIGURATION_FILENAME));
+    assert!(pattern.is_match(".git"));
+    assert!(pattern.is_match("./.git"));
+    assert!(pattern.is_match("../.git"));
+    assert!(pattern.is_match("node_modules"));
+    assert!(pattern.is_match("target"));
+    assert!(pattern.is_match("vendor"));
+}
+
+#[test]
+fn test_text_mimetype_pattern() {
     let pattern = TEXT_MIMETYPE_PATTERN.clone();
-    assert!(pattern.is_match("text/markdown")?);
-    assert!(pattern.is_match("text/plain")?);
-    assert!(pattern.is_match("text/x-c")?);
-    assert!(pattern.is_match("text/x-c++")?);
-    assert!(!pattern.is_match("application/octet-stream")?);
-    Ok(())
+    assert!(pattern.is_match("text/markdown"));
+    assert!(pattern.is_match("text/plain"));
+    assert!(pattern.is_match("text/x-c"));
+    assert!(pattern.is_match("text/x-c++"));
+    assert!(!pattern.is_match("application/octet-stream"));
 }
 
 /// Warning models a TODO finding.
@@ -163,6 +165,7 @@ pub struct Warning {
     /// line_number denotes a line number.
     pub line_number: u64,
 
+    /// line denotes a text snippet.
     pub line: String,
 }
 
@@ -181,6 +184,7 @@ pub enum TodolintError {
     PathRenderError(String),
     UnknownMimetypeError(String),
     RegexParseError(String),
+    TOMLParseError(String),
 }
 
 impl fmt::Display for TodolintError {
@@ -192,6 +196,7 @@ impl fmt::Display for TodolintError {
             TodolintError::PathRenderError(e) => write!(f, "{e}"),
             TodolintError::UnknownMimetypeError(e) => write!(f, "{e}"),
             TodolintError::RegexParseError(e) => write!(f, "{e}"),
+            TodolintError::TOMLParseError(e) => write!(f, "{e}"),
         }
     }
 }
@@ -204,17 +209,49 @@ impl die::PrintExit for TodolintError {
 }
 
 /// Linters conducts code quality scans.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Linter {
     /// debug enables additional logging.
-    pub debug: bool,
+    pub debug: Option<bool>,
+
+    /// path_exclusion_pattern matches skippable file paths.
+    ///
+    /// Syntax is Rust [regex](https://crates.io/crates/regex).
+    pub path_exclusion_pattern: Option<String>,
+
+    /// formal_task_pattern matches standardized, documented code snippets.
+    ///
+    /// Syntax is Rust [regex](https://crates.io/crates/regex).
+    pub formal_task_pattern: Option<String>,
+
+    /// task_pattern matches incomplete code snippets.
+    ///
+    /// Syntax is Rust [regex](https://crates.io/crates/regex).
+    pub task_pattern: Option<String>,
 }
 
 impl Linter {
+    /// load generates a Linter.
+    pub fn load() -> Result<Self, TodolintError> {
+        let pth: &str = &CONFIGURATION_FILENAME;
+        let toml_string = fs::read_to_string(pth)
+            .map_err(|_| TodolintError::IOError(format!("unable to read file: {pth}")))?;
+        let linter: Linter = toml::from_str(&toml_string)
+            .map_err(|e| TodolintError::TOMLParseError(e.message().to_string()))?;
+        Ok(linter)
+    }
+
     /// find_text_paths recursively searches
     /// the given directories and/or file root paths
     /// for non-binary file paths.
     pub fn find_text_paths(&self, roots: Vec<&path::Path>) -> Result<Vec<String>, TodolintError> {
+        let default_path_exclusion_pattern = DEFAULT_PATH_EXCLUSION_PATTERN.clone();
+        let path_exclusion_pattern = regex::Regex::new(
+            self.path_exclusion_pattern
+                .as_ref()
+                .unwrap_or(&default_path_exclusion_pattern),
+        )
+        .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
         let mut pth_bufs = Vec::<path::PathBuf>::new();
 
         for root in roots {
@@ -273,12 +310,9 @@ impl Linter {
                         pth_clean.display()
                     )))?;
 
-            if DEFAULT_EXCLUSION_PATTERN
-                .is_match(pth_abs_str)
-                .map_err(|e| TodolintError::RegexParseError(e.to_string()))?
-            {
-                if self.debug {
-                    eprintln!("info: excluding path: {pth_clean_str}");
+            if path_exclusion_pattern.is_match(pth_abs_str) {
+                if let Some(true) = self.debug {
+                    eprintln!("debug: excluding path: {pth_clean_str}");
                 }
 
                 continue;
@@ -292,12 +326,9 @@ impl Linter {
                 })?
                 .mime();
 
-            if !TEXT_MIMETYPE_PATTERN
-                .is_match(mimetype)
-                .map_err(|e| TodolintError::RegexParseError(e.to_string()))?
-            {
-                if self.debug {
-                    eprintln!("info: skipping mimetype: {mimetype}, path: {pth_clean_str}",);
+            if !TEXT_MIMETYPE_PATTERN.is_match(mimetype) {
+                if let Some(true) = self.debug {
+                    eprintln!("debug: skipping mimetype: {mimetype}, path: {pth_clean_str}",);
                 }
 
                 continue;
@@ -310,6 +341,18 @@ impl Linter {
     }
 
     pub fn check(&self, pth: String) -> Result<Vec<Warning>, TodolintError> {
+        let default_formal_task_pattern = DEFAULT_FORMAL_TASK_PATTERN.clone();
+        let default_task_pattern = DEFAULT_TASK_PATTERN.clone();
+        let formal_task_pattern = regex::Regex::new(
+            self.formal_task_pattern
+                .as_ref()
+                .unwrap_or(&default_formal_task_pattern),
+        )
+        .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
+        let task_pattern =
+            regex::Regex::new(self.task_pattern.as_ref().unwrap_or(&default_task_pattern))
+                .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
+
         let file = fs::File::open(&pth)
             .map_err(|_| TodolintError::IOError(format!("unable to open file: {}", &pth)))?;
         let reader = io::BufReader::new(file);
@@ -321,10 +364,11 @@ impl Linter {
                 TodolintError::IOError(format!("unable to read line from file: {}", &pth))
             })?;
 
-            if TODO_PATTERN
-                .is_match(&line)
-                .map_err(|e| TodolintError::RegexParseError(e.to_string()))?
-            {
+            if formal_task_pattern.is_match(&line) {
+                continue;
+            }
+
+            if task_pattern.is_match(&line) {
                 let line_trimmed = line.to_string().trim_start().to_string();
 
                 warnings.push(Warning {
