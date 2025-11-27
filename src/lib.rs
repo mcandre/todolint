@@ -62,9 +62,9 @@ lazy_static::lazy_static! {
         .collect();
 
     ///
-    /// GENERAL_TASK_PATTERN_TEMPLATE combines `{task_names}` and a pipe (|) delimited task name string, to form a patteron for matching incomplete code snippets.
+    /// GENERAL_TASK_PATTERN_REPLACE_TEMPLATE combines `task_names` and a pipe (|) delimited task name string, to form a patteron for matching incomplete code snippets.
     ///
-    pub static ref GENERAL_TASK_PATTERN_TEMPLATE: &'static str = r"(?i)^.*\b({task_names})\b.*$";
+    pub static ref GENERAL_TASK_PATTERN_REPLACE_TEMPLATE: &'static str = r"(?i)^.*\b(task_names)\b.*$";
 
     /// DEFAULT_SKIP_PATHS collects common third party file paths.
     pub static ref DEFAULT_SKIP_PATHS: Vec<String> = [
@@ -87,8 +87,8 @@ lazy_static::lazy_static! {
         .map(|e| e.to_string())
         .collect();
 
-    /// SKIP_PATHS_PATTERN_TEMPLATE combines `{skip_paths}` and a pipe (|) delimited file paths string to form a pattern matching skippable file paths.
-    pub static ref SKIP_PATHS_PATTERN_TEMPLATE: &'static str = r"^.*(/|\\)?({skip_paths})$";
+    /// SKIP_PATHS_PATTERN_REPLACE_TEMPLATE combines `skip_paths` and a pipe (|) delimited file paths string to form a pattern matching skippable file paths.
+    pub static ref SKIP_PATHS_PATTERN_REPLACE_TEMPLATE: &'static str = r"^.*(/|\\)?(skip_paths)$";
 
     // TEXT_MIMETYPE_PATTERN matches text mimetypes.
     pub static ref TEXT_MIMETYPE_PATTERN: regex::Regex = regex::Regex::new("^text/.+$").unwrap();
@@ -96,7 +96,9 @@ lazy_static::lazy_static! {
 
 /// generate_skip_path_pattern builds a file path matching pattern from a collection of file paths.
 pub fn generate_skip_path_pattern(file_paths: &[String]) -> Result<regex::Regex, regex::Error> {
-    regex::Regex::new(&SKIP_PATHS_PATTERN_TEMPLATE.replace("{skip_paths}", &file_paths.join("|")))
+    regex::Regex::new(
+        &SKIP_PATHS_PATTERN_REPLACE_TEMPLATE.replace("skip_paths", &file_paths.join("|")),
+    )
 }
 
 #[test]
@@ -113,7 +115,9 @@ fn test_default_path_exclusion_pattern() {
 
 /// generate_task_pattern builds a task pattern from a collection of task names.
 pub fn generate_task_pattern(task_names: &[String]) -> Result<regex::Regex, regex::Error> {
-    regex::Regex::new(&GENERAL_TASK_PATTERN_TEMPLATE.replace("{task_names}", &task_names.join("|")))
+    regex::Regex::new(
+        &GENERAL_TASK_PATTERN_REPLACE_TEMPLATE.replace("task_names", &task_names.join("|")),
+    )
 }
 
 #[test]
