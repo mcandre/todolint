@@ -27,7 +27,7 @@
 	clean-example \
 	clean-ports
 
-BANNER=todolint-0.0.5
+BANNER=todolint-0.0.6
 
 all: build
 
