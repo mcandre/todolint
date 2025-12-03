@@ -1,7 +1,6 @@
 //! todolint provides predicates for scanning for incomplete tasks.
 
 extern crate clean_path;
-extern crate lazy_static;
 extern crate mimetype_detector;
 extern crate regex;
 extern crate toml;
@@ -14,17 +13,18 @@ use std::fs;
 use std::io::{self, BufRead};
 use std::path;
 use std::process;
+use std::sync;
 
-lazy_static::lazy_static! {
-    /// CONFIGURATION_FILENAME denotes the file path to an optional TOML configuration file,
-    /// relative to the current working directory.
-    pub static ref CONFIGURATION_FILENAME: &'static str = "todolint.toml";
+/// CONFIGURATION_FILENAME denotes the file path to an optional TOML configuration file,
+/// relative to the current working directory.
+pub static CONFIGURATION_FILENAME: &str = "todolint.toml";
 
-    /// DEFAULT_FORMAL_TASK_PATTERN matches standardized, crossreferenced code snippets of the form `pending: <uri>`.
-    pub static ref DEFAULT_FORMAL_TASK_PATTERN: &'static str = "(?i)^.*pending: [^:]+:.+$";
+/// DEFAULT_FORMAL_TASK_PATTERN matches standardized, crossreferenced code snippets of the form `pending: <uri>`.
+pub static DEFAULT_FORMAL_TASK_PATTERN: &str = "(?i)^.*pending: [^:]+:.+$";
 
-    /// DEFAULT_TASK_NAMES collect common task terms.
-    pub static ref DEFAULT_TASK_NAMES: Vec<String> = [
+/// DEFAULT_TASK_NAMES collect common task terms.
+pub static DEFAULT_TASK_NAMES: sync::LazyLock<Vec<&str>> = sync::LazyLock::new(|| {
+    vec![
         // English
         "band aid",
         "band-aid",
@@ -57,45 +57,39 @@ lazy_static::lazy_static! {
         "waiting on",
         "workaround",
     ]
-        .iter()
-        .map(|e| e.to_string())
-        .collect();
+});
 
-    ///
-    /// GENERAL_TASK_PATTERN_REPLACE_TEMPLATE combines `task_names` and a pipe (|) delimited task name string, to form a patteron for matching incomplete code snippets.
-    ///
-    pub static ref GENERAL_TASK_PATTERN_REPLACE_TEMPLATE: &'static str = r"(?i)^.*\b(task_names)\b.*$";
+///
+/// GENERAL_TASK_PATTERN_REPLACE_TEMPLATE combines `task_names` and a pipe (|) delimited task name string, to form a patteron for matching incomplete code snippets.
+///
+pub static GENERAL_TASK_PATTERN_REPLACE_TEMPLATE: &str = r"(?i)^.*\b(task_names)\b.*$";
 
-    /// DEFAULT_SKIP_PATHS collects common third party file paths.
-    pub static ref DEFAULT_SKIP_PATHS: Vec<String> = [
+/// DEFAULT_SKIP_PATHS collects common third party file paths.
+pub static DEFAULT_SKIP_PATHS: sync::LazyLock<Vec<&str>> = sync::LazyLock::new(|| {
+    vec![
         // todolint
-        &CONFIGURATION_FILENAME,
-
+        CONFIGURATION_FILENAME,
         // VCS
         ".git",
-
         // Internationalization
         "i18n",
         "l10n",
-
         // Third party code
         "node_modules",
         "target",
         "vendor",
     ]
-        .iter()
-        .map(|e| e.to_string())
-        .collect();
+});
 
-    /// SKIP_PATHS_PATTERN_REPLACE_TEMPLATE combines `skip_paths` and a pipe (|) delimited file paths string to form a pattern matching skippable file paths.
-    pub static ref SKIP_PATHS_PATTERN_REPLACE_TEMPLATE: &'static str = r"^.*(/|\\)?(skip_paths)$";
+/// SKIP_PATHS_PATTERN_REPLACE_TEMPLATE combines `skip_paths` and a pipe (|) delimited file paths string to form a pattern matching skippable file paths.
+pub static SKIP_PATHS_PATTERN_REPLACE_TEMPLATE: &str = r"^.*(/|\\)?(skip_paths)$";
 
-    // TEXT_MIMETYPE_PATTERN matches text mimetypes.
-    pub static ref TEXT_MIMETYPE_PATTERN: regex::Regex = regex::Regex::new("^text/.+$").unwrap();
-}
+// TEXT_MIMETYPE_PATTERN matches text mimetypes.
+pub static TEXT_MIMETYPE_PATTERN: sync::LazyLock<regex::Regex> =
+    sync::LazyLock::new(|| regex::Regex::new("^text/.+$").unwrap());
 
 /// generate_skip_path_pattern builds a file path matching pattern from a collection of file paths.
-pub fn generate_skip_path_pattern(file_paths: &[String]) -> Result<regex::Regex, regex::Error> {
+pub fn generate_skip_path_pattern(file_paths: &[&str]) -> Result<regex::Regex, regex::Error> {
     regex::Regex::new(
         &SKIP_PATHS_PATTERN_REPLACE_TEMPLATE.replace("skip_paths", &file_paths.join("|")),
     )
@@ -114,7 +108,7 @@ fn test_default_path_exclusion_pattern() {
 }
 
 /// generate_task_pattern builds a task pattern from a collection of task names.
-pub fn generate_task_pattern(task_names: &[String]) -> Result<regex::Regex, regex::Error> {
+pub fn generate_task_pattern(task_names: &[&str]) -> Result<regex::Regex, regex::Error> {
     regex::Regex::new(
         &GENERAL_TASK_PATTERN_REPLACE_TEMPLATE.replace("task_names", &task_names.join("|")),
     )
@@ -241,7 +235,7 @@ pub struct Linter {
 impl Linter {
     /// load generates a Linter.
     pub fn load() -> Result<Self, TodolintError> {
-        let pth: &str = &CONFIGURATION_FILENAME;
+        let pth = CONFIGURATION_FILENAME;
         let toml_string = fs::read_to_string(pth)
             .map_err(|_| TodolintError::IOError(format!("unable to read file: {pth}")))?;
         let linter: Linter = toml::from_str(&toml_string)
@@ -253,10 +247,13 @@ impl Linter {
     /// the given directories and/or file root paths
     /// for non-binary file paths.
     pub fn find_text_paths(&self, roots: Vec<&path::Path>) -> Result<Vec<String>, TodolintError> {
-        let default_paths: Vec<String> = DEFAULT_SKIP_PATHS.iter().map(|e| e.to_string()).collect();
-        let path_exclusion_pattern =
-            generate_skip_path_pattern(self.skip_paths.as_ref().unwrap_or(&default_paths))
-                .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
+        let skip_paths: Vec<&str> = self
+            .skip_paths
+            .as_ref()
+            .map(|e| e.iter().map(AsRef::as_ref).collect::<Vec<&str>>())
+            .unwrap_or(DEFAULT_SKIP_PATHS.clone());
+        let path_exclusion_pattern = generate_skip_path_pattern(&skip_paths)
+            .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
         let mut pth_bufs = Vec::<path::PathBuf>::new();
 
         for root in roots {
@@ -347,17 +344,19 @@ impl Linter {
 
     pub fn check(&self, pth: String) -> Result<Vec<Warning>, TodolintError> {
         let default_formal_task_pattern: String = DEFAULT_FORMAL_TASK_PATTERN.to_string();
-        let default_task_names: Vec<String> =
-            DEFAULT_TASK_NAMES.iter().map(|e| e.to_string()).collect();
         let formal_task_pattern = regex::Regex::new(
             self.formal_task_pattern
                 .as_ref()
                 .unwrap_or(&default_formal_task_pattern),
         )
         .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
-        let task_pattern =
-            generate_task_pattern(self.task_names.as_ref().unwrap_or(&default_task_names))
-                .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
+        let task_names: Vec<&str> = self
+            .task_names
+            .as_ref()
+            .map(|e| e.iter().map(AsRef::as_ref).collect::<Vec<&str>>())
+            .unwrap_or(DEFAULT_TASK_NAMES.clone());
+        let task_pattern = generate_task_pattern(&task_names)
+            .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
         let file = fs::File::open(&pth)
             .map_err(|_| TodolintError::IOError(format!("unable to open file: {}", &pth)))?;
         let reader = io::BufReader::new(file);

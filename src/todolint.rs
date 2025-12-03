@@ -33,7 +33,7 @@ fn main() {
     }
 
     let mut linter = todolint::Linter::default();
-    let configuration_filename: &str = &todolint::CONFIGURATION_FILENAME;
+    let configuration_filename = todolint::CONFIGURATION_FILENAME;
 
     if path::Path::new(configuration_filename).exists() {
         if debug {
