@@ -177,7 +177,7 @@ impl fmt::Display for Warning {
     }
 }
 
-/// KirillError models bad computer states.
+/// TodolintError models bad computer states.
 #[derive(Debug)]
 pub enum TodolintError {
     IOError(String),
