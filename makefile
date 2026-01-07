@@ -30,7 +30,7 @@
 	clean-example \
 	clean-ports
 
-VERSION=0.0.7
+VERSION=0.0.8
 BANNER=todolint-$(VERSION)
 
 all: build
