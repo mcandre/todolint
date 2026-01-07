@@ -13,6 +13,9 @@
 	clippy \
 	crit \
 	doc \
+	docker-build \
+	docker-push \
+	docker-test \
 	install \
 	lint \
 	port \
@@ -27,7 +30,8 @@
 	clean-example \
 	clean-ports
 
-BANNER=todolint-0.0.7
+VERSION=0.0.7
+BANNER=todolint-$(VERSION)
 
 all: build
 
@@ -47,7 +51,7 @@ clean: \
 	clean-ports
 
 clean-archive:
-	rm ".crit/bin/$(BANNER).tgz"
+	rm .crit/bin/$(BANNER).tgz
 
 clean-cargo:
 	cargo clean
@@ -69,6 +73,15 @@ crit:
 doc:
 	cargo doc
 
+docker-build:
+	tuggy -t n4jm4/todolint:$(VERSION) --load
+
+docker-push:
+	tuggy -t n4jm4/todolint:$(VERSION) -a n4jm4/todolint --push
+
+docker-test:
+	tuggy -t n4jm4/todolint:test --load --push
+
 install:
 	cargo install --force --path .
 
@@ -79,7 +92,7 @@ lint: \
 	rustfmt
 
 port: crit
-	chandler -C .crit/bin -czf "$(BANNER).tgz" "$(BANNER)"
+	chandler -C .crit/bin -czf $(BANNER).tgz $(BANNER)
 
 publish:
 	cargo publish
