@@ -80,7 +80,8 @@ docker-push:
 	tuggy -t n4jm4/todolint:$(VERSION) -a n4jm4/todolint --push
 
 docker-test:
-	tuggy -t n4jm4/todolint:test --load --push
+	tuggy -t n4jm4/todolint:test --load
+	tuggy -t n4jm4/todolint:test --push
 
 install:
 	cargo install --force --path .
