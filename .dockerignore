@@ -2,6 +2,7 @@
 *.png
 .editorconfig
 .rubberstamp
+tuggy.toml
 examples/
 .crit/
 .github/
