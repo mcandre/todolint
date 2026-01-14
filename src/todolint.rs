@@ -1,4 +1,4 @@
-//! CLI kirill tool
+//! CLI todolint tool
 
 extern crate getopts;
 extern crate todolint;
