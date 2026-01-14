@@ -1,6 +1,6 @@
 # todolint: code comment SAST security scanner
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/n4jm4/todolint)](https://hub.docker.com/r/n4jm4/todolint) [![Crates.io Downloads (latest version)](https://img.shields.io/crates/dv/todolint?label=crate%20downloads)](https://crates.io/crates/todolint) [![docs.rs](https://img.shields.io/docsrs/todolint)](https://docs.rs/todolint/latest/todolint/) [![license](https://img.shields.io/badge/license-BSD-3)](LICENSE.md) [![Donate](https://img.shields.io/badge/GUMROAD-36a9ae?style=flat&logo=gumroad&logoColor=white)](https://mcandre.gumroad.com/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/n4jm4/todolint)](https://hub.docker.com/r/n4jm4/todolint) [![Crates.io Downloads (latest version)](https://img.shields.io/crates/dv/todolint?label=crate%20downloads)](https://crates.io/crates/todolint) [![docs.rs](https://img.shields.io/docsrs/todolint)](https://docs.rs/todolint/latest/todolint/) [![Test](https://github.com/mcandre/todolint/actions/workflows/test.yml/badge.svg)](https://github.com/mcandre/todolint/actions/workflows/test.yml) [![license](https://img.shields.io/badge/license-BSD-3)](LICENSE.md) [![Donate](https://img.shields.io/badge/GUMROAD-36a9ae?style=flat&logo=gumroad&logoColor=white)](https://mcandre.gumroad.com/)
 
 ![pencil case logo](todolint.png)
 
