@@ -106,4 +106,4 @@ cargo install --force --path .
 * [cargo](https://doc.rust-lang.org/cargo/)
 * [git](https://git-scm.com/)
 
-For more details on developing todolint itself, see our [development guide](DEVELOPMENT.md).
+For more details on developing todolint, see our [development guide](DEVELOPMENT.md).
