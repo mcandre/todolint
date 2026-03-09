@@ -72,6 +72,12 @@ make port
 make package
 ```
 
+# UPLOAD BINARIES
+
+```sh
+make upload
+```
+
 # PUBLISH CRATE
 
 ```sh
