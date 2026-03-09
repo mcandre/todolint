@@ -1,6 +1,6 @@
 # todolint: code comment SAST security scanner
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/n4jm4/todolint)](https://hub.docker.com/r/n4jm4/todolint) [![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/todolint?label=crate%20downloads)](https://crates.io/crates/todolint) [![GitHub Downloads](https://img.shields.io/github/downloads/mcandre/todolint/total?logo=github)](https://github.com/mcandre/todolint/releases) [![docs.rs](https://img.shields.io/docsrs/todolint)](https://docs.rs/todolint/latest/todolint/) [![Test](https://github.com/mcandre/todolint/actions/workflows/test.yml/badge.svg)](https://github.com/mcandre/todolint/actions/workflows/test.yml) [![license](https://img.shields.io/badge/license-BSD-3)](LICENSE.md) [![Donate](https://img.shields.io/badge/-any?logo=gumroad&label=Donate&color=grey)](https://mcandre.gumroad.com/)
+[![CloudFlare R2 install media downloads](https://img.shields.io/badge/Cloudflare-F28220?style=for-the-badge&logo=Cloudflare&logoColor=white&style=flat)](#download) [![Docker Pulls](https://img.shields.io/docker/pulls/n4jm4/todolint)](https://hub.docker.com/r/n4jm4/todolint) [![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/todolint?label=crate%20downloads)](https://crates.io/crates/todolint) [![GitHub Downloads](https://img.shields.io/github/downloads/mcandre/todolint/total?logo=github)](https://github.com/mcandre/todolint/releases) [![docs.rs](https://img.shields.io/docsrs/todolint)](https://docs.rs/todolint/latest/todolint/) [![Test](https://github.com/mcandre/todolint/actions/workflows/test.yml/badge.svg)](https://github.com/mcandre/todolint/actions/workflows/test.yml) [![license](https://img.shields.io/badge/license-BSD-0)](LICENSE.md)
 
 ![pencil case logo](todolint.png)
 
@@ -81,18 +81,64 @@ Exception:
 
 Thus, we now have a formal notation to track coding imperfections, including metadata about _why_ the code may be stuck indefinitely in its current written state.
 
-# INSTALLATION
+# DOWNLOAD
 
-See [INSTALL.md](INSTALL.md).
+<table>
+  <thead>
+    <tr>
+      <th>OS</th>
+      <th colspan=2>Package</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Alpine Linux</td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/alpine-linux/todolint-0.0.8-r1.x86_64.apk">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/alpine-linux/todolint-0.0.8-r1.aarch64.apk">ARM</a></td>
+    </tr>
+    <tr>
+      <td>Fedora</td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/fedora/todolint-0.0.8-1.x86_64.rpm">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/fedora/todolint-0.0.8-1.aarch64.rpm">ARM</a></td>
+    </tr>
+    <tr>
+      <td>FreeBSD</td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/freebsd-amd64/todolint-0.0.8_1.pkg">Intel</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>macOS</td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/macos/todolint-x86_64-0.0.8-1.pkg">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/macos/todolint-arm64-0.0.8-1.pkg">ARM</a></td>
+    </tr>
+    <tr>
+      <td>NetBSD</td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/netbsd-x86_64/todolint-0.0.8nb1.tgz">Intel</a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Ubuntu</td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/ubuntu/todolint_0.0.8-1_amd64.deb">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/ubuntu/todolint_0.0.8-1_arm64.deb">ARM</a></td>
+    </tr>
+    <tr>
+      <td>Windows</td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/windows/todolint-0.0.8.1-x64.msi">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/windows/todolint-0.0.8.1-arm64.msi">ARM</a></td>
+    </tr>
+  </tbody>
+</table>
 
-# SEE ALSO
+# System Requirements
 
-* [chandler](https://github.com/mcandre/chandler) normalizes tarballs
-* [kirill](https://github.com/mcandre/kirill) scans JSON documents
-* [linters](https://github.com/mcandre/linters) curates many linters, SAST tools, and style guides
-* [nile](https://github.com/mcandre/nile) normalizes ebooks
-* [slick](https://github.com/mcandre/slick) scans POSIX shell scripts
-* [stank](https://github.com/mcandre/stank) scans shell scripts
-* [unmake](https://github.com/mcandre/unmake) scans makefiles
+## Bitness
+
+64
+
+For more platforms and installation methods, see our [install guide](INSTALL.md).
+
+# RESOURCES
+
+* [mcandre/linters](https://github.com/mcandre/linters) curates many linters, SAST tools, and style guides
 
 ✏️

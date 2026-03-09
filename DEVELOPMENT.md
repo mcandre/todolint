@@ -1,20 +1,28 @@
+# DEVELOPMENT GUIDE
+
+todolint follows standard, cargo based operations for compiling and unit testing Rust code.
+
+For advanced operations, such as linting, managing multiplatform Docker images, and so on, we further supplement with some software industry tools.
+
 # BUILDTIME REQUIREMENTS
 
 * a UNIX-like environment (e.g. [WSL](https://learn.microsoft.com/en-us/windows/wsl/))
+* [awscli](https://aws.amazon.com/cli/)
+* [bash](https://www.gnu.org/software/bash/) 4+
+* [Docker](https://www.docker.com/)
+* POSIX compliant [findutils](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/find.html)
+* [jq](https://jqlang.org/)
 * POSIX compliant [make](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/make.html)
 * [rustup](https://rustup.rs/) 1.28.1+
 * [Rust](https://www.rust-lang.org/en-US/)
 * [cross](https://crates.io/crates/cross) 4e64366af6095c84fa4f54a0fa5a2ba7d9a271aa
-* [Docker](https://www.docker.com/) 28.0.1+
+* GNU [tar](https://www.gnu.org/software/tar/) as `gtar`
 * Provision additional dev tools with `make -f install.mk`
 
 ## Recommended
 
-* a host capable of running musl/Linux containers (e.g. a GNU/Linux, musl/Linux, macOS, or Windows host)
-* [Docker First Aid Kit](https://github.com/mcandre/docker-first-aid-kit)
-* Apply `DOCKER_DEFAULT_PLATFORM` = `linux/amd64` environment variable
+* Apple Silicon macOS users may want to apply `DOCKER_DEFAULT_PLATFORM=linux/amd64`, in order to account for images commonly lacking `linux/arm64` buildx platforms
 * [ASDF](https://asdf-vm.com/) 0.18 (run `asdf reshim` after provisioning)
-* [direnv](https://direnv.net/) 2
 
 # INSTALL BINARIES FROM SOURCE
 
@@ -46,19 +54,37 @@ make lint
 make test
 ```
 
-# PORT
+# CROSSCOMPILE BINARIES
+
+```sh
+make crit
+```
+
+# ARCHIVE BINARIES
 
 ```sh
 make port
 ```
 
-# PUBLISH
+# PACKAGE BIARIES
+
+```sh
+make package
+```
+
+# PUBLISH CRATE
 
 ```sh
 make publish
 ```
 
-# TEST DOCKER IMAGES
+# BUILD DOCKER IMAGES
+
+```sh
+make docker-build
+```
+
+# TEST PUSH DOCKER IMAGES
 
 ```sh
 make docker-test

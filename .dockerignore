@@ -1,10 +1,14 @@
 *.md
+*.mk
 *.png
 .editorconfig
 .rubberstamp
-tuggy.toml
+Cross.toml
+crit.toml
+rockhopper.toml
 examples/
 .crit/
+.rockhopper/
 .github/
 .git/
 # Created by https://www.toptal.com/developers/gitignore/api/rust

@@ -1,0 +1,86 @@
+# log_level = "debug"
+log_level = "quiet"
+
+[rocklet]
+name = "todolint"
+identifier = "com.github.mcandre.todolint"
+rev = "1"
+maintainer = "Andrew Pennebaker <n4jm4@pm.me>"
+manufacturer = "YelloSoft"
+summary = "code comment SAST security scanner"
+description = "todolint identifies bugs based on code comments"
+copyright = "Copyright (C) 2025 Andrew Pennebaker"
+license = "0BSD"
+url = "https://github.com/mcandre/todolint"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-alpine-linux"
+rocklet.oci_arch = "linux/amd64"
+dest."usr/bin" = ".crit/bin/todolint/x86_64-unknown-linux-musl"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-alpine-linux"
+rocklet.oci_arch = "linux/arm64"
+dest."usr/bin" = ".crit/bin/todolint/aarch64-unknown-linux-musl"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-fedora"
+rocklet.oci_arch = "linux/amd64"
+dest."usr/bin" = ".crit/bin/todolint/x86_64-unknown-linux-musl"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-fedora"
+rocklet.oci_arch = "linux/arm64"
+dest."usr/bin" = ".crit/bin/todolint/aarch64-unknown-linux-musl"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-freebsd"
+rocklet.origin = "local/todolint"
+rocklet.oci_arch = "linux/amd64"
+rocklet.os_arch = "freebsd:*:amd64"
+dest."usr/local/bin" = ".crit/bin/todolint/x86_64-unknown-freebsd"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-macos"
+rocklet.oci_arch = "linux/amd64"
+rocklet.os_arch = "x86_64"
+dest."usr/local/bin" = ".crit/bin/todolint/x86_64-apple-darwin"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-macos"
+rocklet.oci_arch = "linux/arm64"
+rocklet.os_arch = "arm64"
+dest."usr/local/bin" = ".crit/bin/todolint/aarch64-apple-darwin"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-netbsd"
+rocklet.oci_arch = "linux/amd64"
+rocklet.os_arch = "x86_64"
+rocklet.pkg_os_version = "10.1"
+# byte estimate, including dependencies
+rocklet.pkg_size_all = "1000000"
+dest."bin" = ".crit/bin/todolint/x86_64-unknown-netbsd"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-ubuntu"
+rocklet.oci_arch = "linux/amd64"
+dest."usr/bin" = ".crit/bin/todolint/x86_64-unknown-linux-musl"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-ubuntu"
+rocklet.oci_arch = "linux/arm64"
+dest."usr/bin" = ".crit/bin/todolint/aarch64-unknown-linux-musl"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-windows"
+rocklet.oci_arch = "linux/amd64"
+rocklet.os_arch = "x64"
+rocklet.msi_upgrade_code = "EEE4A77C-949F-4C5F-B5AC-FCBD79F2B051"
+dest."bin" = ".crit/bin/todolint/x86_64-pc-windows-msvc"
+
+[[pkg]]
+image = "n4jm4/rockhopper:0.0.21-windows"
+rocklet.oci_arch = "linux/arm64"
+rocklet.os_arch = "arm64"
+rocklet.msi_upgrade_code = "EEE4A77C-949F-4C5F-B5AC-FCBD79F2B051"
+dest."bin" = ".crit/bin/todolint/aarch64-pc-windows-msvc"
