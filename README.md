@@ -93,38 +93,38 @@ Thus, we now have a formal notation to track coding imperfections, including met
   <tbody>
     <tr>
       <td>Alpine Linux</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/alpine-linux/todolint-0.0.8-r1.x86_64.apk">Intel</a></td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/alpine-linux/todolint-0.0.8-r1.aarch64.apk">ARM</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/alpine-linux/todolint-0.0.9-r1.x86_64.apk">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/alpine-linux/todolint-0.0.9-r1.aarch64.apk">ARM</a></td>
     </tr>
     <tr>
       <td>Fedora</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/fedora/todolint-0.0.8-1.x86_64.rpm">Intel</a></td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/fedora/todolint-0.0.8-1.aarch64.rpm">ARM</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/fedora/todolint-0.0.9-1.x86_64.rpm">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/fedora/todolint-0.0.9-1.aarch64.rpm">ARM</a></td>
     </tr>
     <tr>
       <td>FreeBSD</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/freebsd-amd64/todolint-0.0.8_1.pkg">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/freebsd-amd64/todolint-0.0.9_1.pkg">Intel</a></td>
       <td></td>
     </tr>
     <tr>
       <td>macOS</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/macos/todolint-x86_64-0.0.8-1.pkg">Intel</a></td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/macos/todolint-arm64-0.0.8-1.pkg">ARM</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/macos/todolint-x86_64-0.0.9-1.pkg">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/macos/todolint-arm64-0.0.9-1.pkg">ARM</a></td>
     </tr>
     <tr>
       <td>NetBSD</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/netbsd-x86_64/todolint-0.0.8nb1.tgz">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/netbsd-x86_64/todolint-0.0.9nb1.tgz">Intel</a></td>
       <td></td>
     </tr>
     <tr>
       <td>Ubuntu</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/ubuntu/todolint_0.0.8-1_amd64.deb">Intel</a></td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/ubuntu/todolint_0.0.8-1_arm64.deb">ARM</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/ubuntu/todolint_0.0.9-1_amd64.deb">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/ubuntu/todolint_0.0.9-1_arm64.deb">ARM</a></td>
     </tr>
     <tr>
       <td>Windows</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/windows/todolint-0.0.8.1-x64.msi">Intel</a></td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.8/windows/todolint-0.0.8.1-arm64.msi">ARM</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/windows/todolint-0.0.9.1-x64.msi">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/windows/todolint-0.0.9.1-arm64.msi">ARM</a></td>
     </tr>
   </tbody>
 </table>
