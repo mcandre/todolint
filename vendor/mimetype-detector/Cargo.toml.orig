@@ -1,0 +1,31 @@
+[package]
+name = "mimetype-detector"
+version = "0.3.6"
+edition = "2021"
+description = "Fast, accurate, and thread-safe MIME type detection for ~500 file formats with zero dependencies"
+license = "MIT OR Apache-2.0"
+authors = ["Siargei"]
+repository = "https://github.com/Asuan/mimetype-detector"
+homepage = "https://github.com/Asuan/mimetype-detector"
+documentation = "https://docs.rs/mimetype-detector"
+readme = "README.md"
+keywords = ["mime", "mimetype", "file-detection","file-type"]
+categories = ["filesystem", "parsing", "web-programming"]
+rust-version = "1.80.0"
+exclude = ["/.github", "/benches", "/examples", "/tests", ".gitignore", "target/", "*.tmp", "/test-data", "LICENSE-MIT", "LICENSE-APACHE", "CHANGELOG.md", "SUPPORTED_FORMATS.md"]
+
+[features]
+default = []
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+
+[dependencies]
+
+[dev-dependencies]
+criterion = { version = "0.8", features = ["html_reports"] }
+
+[[bench]]
+name = "detection_bench"
+harness = false
