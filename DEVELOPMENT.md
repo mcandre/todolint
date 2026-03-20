@@ -12,7 +12,6 @@ For advanced operations, such as linting, we further supplement with some softwa
 * [awscli](https://aws.amazon.com/cli/)
 * [bash](https://www.gnu.org/software/bash/) 4+
 * [Docker](https://www.docker.com/)
-* [findutils](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/find.html)
 * [jq](https://jqlang.org/)
 * [make](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/make.html)
 * [Rust](https://www.rust-lang.org/en-US/)
@@ -21,7 +20,7 @@ For advanced operations, such as linting, we further supplement with some softwa
 
 ## Recommended
 
-* [asdf](https://asdf-vm.com/) 0.18
+* [asdf](https://asdf-vm.com/)
 
 ## Postinstall
 
