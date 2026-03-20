@@ -1,25 +1,70 @@
 # CONFIGURATION
 
+todolint uses [TOML](https://toml.io/en/) syntax.
+
+# todolint.toml
+
 todolint loads an optional `todolint.toml` file in the current working directory.
 
-## Example
+# debug
+
+Default: `false`
+
+Enables additional logging.
+
+Example:
 
 ```toml
-# debug = true
+debug = true
+```
 
-# skip_paths = [
-#     "todolint.toml",
-#     ".git",
-#     "i18n",
-#     "l10n",
-#     "node_modules",
-#     "target",
-#     "vendor",
-# ]
+# skip_paths
 
-formal_task_pattern = "(?i)^.*pending: [^:]+:.+$"
+Default:
 
-task_names = [
+```toml
+[
+    "todolint.toml",
+    ".git",
+    "i18n",
+    "l10n",
+    "node_modules",
+    "target",
+    "vendor",
+]
+```
+
+Exclude matching file basenames.
+
+Example:
+
+```toml
+skip_paths = [
+    ".DS_Store",
+    "Thumbs.db",
+]
+```
+
+# formal_task_pattern
+
+Default: `"(?i)^.*pending: [^:]+:.+$"`
+
+Exclude matching lines.
+
+Syntax: [Rust regex](https://crates.io/crates/regex).
+
+Example:
+
+```toml
+formal_task_pattern = "(?i)^.*pendiente: [^:]+:.+$"
+```
+
+# task_names
+
+Default:
+
+```toml
+[
     "band aid",
     "band-aid",
     "bandaid",
@@ -51,7 +96,19 @@ task_names = [
     "waiting on",
     "workaround",
 ]
-
 ```
 
-Customize patterns to taste. For example, `todo` may trigger false positive homophones in some languages (Japanese, Portuñol, etc).
+Trigger code smell warnings on matching terms.
+
+Case insensitive.
+
+Example:
+
+```toml
+task_names = [
+    "pte",
+    "pend",
+    "pendiente",
+    "truco",
+]
+```

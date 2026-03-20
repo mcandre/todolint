@@ -7,7 +7,18 @@ authors = ["Andrew Pennebaker <n4jm4@pm.me>"]
 license = "0BSD"
 repository = "https://github.com/mcandre/todolint"
 exclude = [
+    "*.mk",
+    "*.png",
+    ".crit",
+    ".editorconfig",
+    ".rockhopper",
+    ".rubberstamp",
+    ".tool-versions",
+    "Cross.toml",
+    "crit.toml",
     "examples",
+    "makefile",
+    "upload",
 ]
 
 [dependencies]
