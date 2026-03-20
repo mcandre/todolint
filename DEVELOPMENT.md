@@ -14,8 +14,7 @@ For advanced operations, such as linting, we further supplement with some softwa
 * [Docker](https://www.docker.com/)
 * [jq](https://jqlang.org/)
 * [make](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/make.html)
-* [Rust](https://www.rust-lang.org/en-US/)
-* [cross](https://crates.io/crates/cross) 4e64366af6095c84fa4f54a0fa5a2ba7d9a271aa
+* [rustup](https://rustup.rs/)
 * Provision additional dev tools with `make -f install.mk`
 
 ## Recommended
