@@ -37,13 +37,13 @@ metrics.js:10:// hack: divide by zero
   <tbody>
     <tr>
       <td>macOS 26 Tahoe+</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/macos/todolint-x86_64-0.0.9-1.pkg">Intel</a></td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/macos/todolint-arm64-0.0.9-1.pkg">ARM</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.10/macos/todolint-x86_64-0.0.10-1.pkg">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.10/macos/todolint-arm64-0.0.10-1.pkg">ARM</a></td>
     </tr>
     <tr>
       <td>Ubuntu 24.04 Noble+ / WSL 2+</td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/ubuntu/todolint_0.0.9-1_amd64.deb">Intel</a></td>
-      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.9/ubuntu/todolint_0.0.9-1_arm64.deb">ARM</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.10/ubuntu/todolint_0.0.10-1_amd64.deb">Intel</a></td>
+      <td><a href="https://pub-b11eab734c5a41ddb16f0a2e0e012d1d.r2.dev/todolint-0.0.10/ubuntu/todolint_0.0.10-1_arm64.deb">ARM</a></td>
     </tr>
   </tbody>
 </table>
