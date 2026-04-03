@@ -16,3 +16,6 @@ all:
 		cross \
 			--git https://github.com/cross-rs/cross \
 			--rev 4e64366af6095c84fa4f54a0fa5a2ba7d9a271aa
+	go install golang.org/x/vuln/cmd/govulncheck@latest
+	go install tool
+	go mod tidy

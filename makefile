@@ -13,6 +13,7 @@
 	clippy \
 	crit \
 	doc \
+	govulncheck \
 	install \
 	lint \
 	package \
@@ -34,11 +35,13 @@ BANNER=todolint
 
 all: build
 
-audit:
-	cargo audit
+audit: cargo-audit govulncheck
 
 build:
 	cargo build --release
+
+cargo-audit:
+	cargo audit
 
 cargo-check:
 	cargo check
@@ -70,6 +73,9 @@ crit:
 
 doc:
 	cargo doc
+
+govulncheck:
+	govulncheck -scan package ./...
 
 install:
 	cargo install --force --path .
