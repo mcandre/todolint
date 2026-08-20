@@ -296,7 +296,7 @@ impl Linter {
             let pth_clean_buf = clean_path::clean(pth);
             let pth_clean = pth_clean_buf.as_path();
             let pth_abs = path::absolute(pth_clean).map_err(|_| {
-                TodolintError::IOError(format!("unable to resolve path: {}", &pth_clean.display()))
+                TodolintError::IOError(format!("unable to resolve path: {}", pth_clean.display()))
             })?;
             let pth_abs_str = pth_abs
                 .to_str()
@@ -358,14 +358,14 @@ impl Linter {
         let task_pattern = generate_task_pattern(&task_names)
             .map_err(|e| TodolintError::RegexParseError(e.to_string()))?;
         let file = fs::File::open(&pth)
-            .map_err(|_| TodolintError::IOError(format!("unable to open file: {}", &pth)))?;
+            .map_err(|_| TodolintError::IOError(format!("unable to open file: {}", pth)))?;
         let reader = io::BufReader::new(file);
         let mut warnings = Vec::<Warning>::new();
         let mut i = 1u64;
 
         for line_result in reader.lines() {
             let line = line_result.map_err(|_| {
-                TodolintError::IOError(format!("unable to read line from file: {}", &pth))
+                TodolintError::IOError(format!("unable to read line from file: {}", pth))
             })?;
 
             if formal_task_pattern.is_match(&line) {
