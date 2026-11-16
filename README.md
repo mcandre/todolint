@@ -1,6 +1,6 @@
 # todolint: code comment SAST security scanner
 
-[![CloudFlare R2 install media downloads](https://img.shields.io/badge/Packages-F38020?logo=Cloudflare&logoColor=white)](#download) [![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/todolint?label=crate%20downloads)](https://crates.io/crates/todolint) [![docs.rs](https://img.shields.io/docsrs/todolint)](https://docs.rs/todolint/latest/todolint/) [![Test](https://github.com/mcandre/todolint/actions/workflows/test.yml/badge.svg)](https://github.com/mcandre/todolint/actions/workflows/test.yml) [![license](https://img.shields.io/badge/license-BSD-0)](LICENSE.md)
+[![CloudFlare R2 Downloads](https://badgen.net/static/download/Packages/f38020?icon=cloudflare)](#download) [![Crate Downloads](https://badgen.net/crates/d/todolint?label=crate+downloads)](https://crates.io/crates/todolint) [![API Docs](https://badgen.net/static/docs/API/3eca2a?icon=docs.rs)](https://docs.rs/todolint/latest/todolint/) [![CI/CD](https://badgen.net/github/checks/mcandre/todolint?icon=github)](https://github.com/mcandre/todolint/actions) [![License](https://badgen.net/static/license/BSD/ab2b29?icon=freebsd)](LICENSE.md)
 
 ![pencil case logo](todolint.png)
 
