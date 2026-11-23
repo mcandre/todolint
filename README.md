@@ -1,6 +1,6 @@
 # todolint: code comment SAST security scanner
 
-[![CloudFlare R2 Downloads](https://badgen.net/static/download/Packages/f38020?icon=cloudflare)](#download) [![Crate Downloads](https://badgen.net/crates/d/todolint?label=crate+downloads)](https://crates.io/crates/todolint) [![API Docs](https://badgen.net/static/docs/API/3eca2a?icon=docs.rs)](https://docs.rs/todolint/latest/todolint/) [![CI/CD](https://badgen.net/github/checks/mcandre/todolint?icon=github)](https://github.com/mcandre/todolint/actions) [![License](https://badgen.net/static/license/BSD/ab2b29?icon=freebsd)](LICENSE.md)
+[![CloudFlare R2 Downloads](https://badgen.net/static/download/Packages/f38020?icon=cloudflare)](#download) [![Crate Downloads](https://badgen.net/crates/d/todolint?label=crate+downloads)](https://crates.io/crates/todolint) [![API Docs](https://badgen.net/static/docs/API/3eca2a?icon=docs.rs)](https://docs.rs/todolint/latest/todolint/) [![CI/CD](https://badgen.net/github/checks/mcandre/todolint?icon=github)](https://github.com/mcandre/todolint/actions) [![License](https://badgen.net/static/license/BSD/ab2b29?icon=freebsd)](LICENSE.md) [![AI](https://badgen.net/static/ai/Gemini|hint?color=886fbf&icon=google-gemini)](AI-DECLARATION.md)
 
 ![pencil case logo](todolint.png)
 
